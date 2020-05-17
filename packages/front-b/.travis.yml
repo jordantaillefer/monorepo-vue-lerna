@@ -1,0 +1,30 @@
+language: node_js
+node_js:
+- '12'
+cache:
+  yarn: true
+  directories:
+  - "~/.cache/Cypress"
+jobs:
+  include:
+  - stage: Code checking
+    name: Lint
+    script: yarn lint
+  - name: Unit tests
+    script: yarn test:unit
+  - name: Build
+    script: yarn build
+  - stage: Deploy to heroku
+    if: branch = master
+    script: skip
+    deploy:
+      provider: heroku
+      app: front-b
+      on:
+        repo: jordantaillefer/front-b
+        branch: master
+      api_key:
+        secure: CLazuF6jMU68x//YGARNod+tryFGQs1VpxG0Jh+F6m2/42pbzq5JV/MGWRNdlQ4bgdIAmKvEoiy2xUQEZx+EMNl4bEnwZxbXxLoeNun45RlCH+/WOBh+wEGfwb+DLRIHtA0DCSWYrDeqpgcK6AgF3X3yO1LazHQyPiI5kUQNCJX/iz84MIXhGvmXepyzCYCGKm07o8xsb36uF8rzkunfqQ4nfR0HZNZTs+6NYMFbSwuHfFKGF7KIbLylWVKhZidbPf0aJ3d/6K7w25gl3jJvM7yE5LHWr2Swq7O2ms57OWzXX9+R2fOhajS0xsMrfcnL028DuENNk56p9K0WK+4tDYEHzjfTZ9FLM+EBNoG9XwmpOEH8PbAZGcF504oVUrqx8VPHheI9Vs+FmP4lSztCvdB0T8nDifMXN0Bncqmr7Y19QJOztgq4hFTu09d2t/RtYwmONU75ENR+VXHuohqcyLwT/yUVX+V4jt9CCm1JMEqKJkebFErGJLhxxsJjhcGuk+lKLjSS2vzctkBGjOMvXo05BrgGhLPaVXj2tq9GQb7Ofk64kjZu4DQqy8w2qAuB5GMl43KBh+978cWBOln2DxxpoLiwc7UE8BgQxx/2q2TF4r/a2mBQ7DWXBcc9sC+hsvrLIr//Ow0sGndG5SriZhvaQba1qxdrT8y0RAw53oA=
+  - stage: Test end-to-end
+    if: branch = master
+    script: yarn test:e2e --headless --url https://front-b.herokuapp.com
