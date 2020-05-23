@@ -1,0 +1,45 @@
+language: node_js
+node_js:
+- '12'
+cache:
+  yarn: true
+  directories:
+  - "~/.cache/Cypress"
+jobs:
+  include:
+  - stage: Code checking
+    name: Lint
+    script: lerna run lint
+  - name: Unit tests
+    script: lerna run test:unit
+  - name: Build
+    script: lerna run build
+  - stage: Deploy front A to heroku
+    if: branch = master
+    script: skip
+    deploy:
+      provider: heroku
+      app: front-a
+      on:
+        repo: jordantaillefer/monorepo-vue-lerna
+        branch: master
+      api_key:
+        secure: 0Likpn7hBJ0CHZL8C8JYkbU2qYzDSI6BIfbQjtKYjDWq5LuRAmfvXM3YRqv1ZwcpC/Gfw2OVxMnpghijPYC9+I5MkWoNjyUiBTN4XBtmt8JkIwpveSszpT7hT0l2rqAa2IIajAey8aEaGQLm3UPnsPbtrz7SpQU8q46FNOGEbR1tr9HLWyjX35fcHYkGhXGbGTQa+fD+8QinNMFjbPyBrtZy/y63zzYSlyYhX1W2MI0c8oN0AXeGcGAE607gtBmSiLeGsdNw/OgYOZ3H7DAh7MATJ/QsRpJtcky63QtUxUdTkFMuRiozBpjggo3OshUhqLl/kwQ3k8sQxmJixzFmJ9pjsoJR4GFtv32J5DrfZBuuGFiGQ4SmzA8uTe+OB48yM3bYzIqUKAlm/RAsbKK/B9t5vEY3Xfejoe+N6umhsyatBHs9VbnKJKuB/5QLp5jtRF3gEknHl0xjspqI+BL7aWh68IVAttL87dDGSwi5StWZmCgQ3IwRcAESOp+VWMhJLZt0emmFtfOhJD8b/Bhs7UxfjhTadLoqyFmEmWmc5lNLJzV7NqywaSlgTeYL9mmXJr26G7mcyv6t1cysTsLzTRk8ppz8KPq/jzRcyntWoOkVLYRqtXY/pS0QSAaU0Ef/eVvWVgvJh1z5+yfVkO20g8+jG5A3sxD/ol/XTtbt7Ts=
+  - stage: Deploy front B to heroku
+    if: branch = master
+    script: skip
+    deploy:
+      provider: heroku
+      app: front-b
+      on:
+        repo: jordantaillefer/monorepo-vue-lerna
+        branch: master
+      api_key:
+        secure: 0Likpn7hBJ0CHZL8C8JYkbU2qYzDSI6BIfbQjtKYjDWq5LuRAmfvXM3YRqv1ZwcpC/Gfw2OVxMnpghijPYC9+I5MkWoNjyUiBTN4XBtmt8JkIwpveSszpT7hT0l2rqAa2IIajAey8aEaGQLm3UPnsPbtrz7SpQU8q46FNOGEbR1tr9HLWyjX35fcHYkGhXGbGTQa+fD+8QinNMFjbPyBrtZy/y63zzYSlyYhX1W2MI0c8oN0AXeGcGAE607gtBmSiLeGsdNw/OgYOZ3H7DAh7MATJ/QsRpJtcky63QtUxUdTkFMuRiozBpjggo3OshUhqLl/kwQ3k8sQxmJixzFmJ9pjsoJR4GFtv32J5DrfZBuuGFiGQ4SmzA8uTe+OB48yM3bYzIqUKAlm/RAsbKK/B9t5vEY3Xfejoe+N6umhsyatBHs9VbnKJKuB/5QLp5jtRF3gEknHl0xjspqI+BL7aWh68IVAttL87dDGSwi5StWZmCgQ3IwRcAESOp+VWMhJLZt0emmFtfOhJD8b/Bhs7UxfjhTadLoqyFmEmWmc5lNLJzV7NqywaSlgTeYL9mmXJr26G7mcyv6t1cysTsLzTRk8ppz8KPq/jzRcyntWoOkVLYRqtXY/pS0QSAaU0Ef/eVvWVgvJh1z5+yfVkO20g8+jG5A3sxD/ol/XTtbt7Ts=
+  - stage: Test end-to-end
+    name: Test end-to-end Front A
+    if: branch = master
+    script: lerna run --scope front-a test:e2e:production
+  - name: Test end-to-end Front B
+    if: branch = master
+    script: lerna run --scope front-b test:e2e:production
