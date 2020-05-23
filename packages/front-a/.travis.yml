@@ -25,3 +25,6 @@ jobs:
         branch: master
       api_key:
         secure: NmIlu2gFivsOwzhguKFJ+3x5QgEVcYu1mw2cTOS5N4wanNTy7SLV8Awwm0IXdAJ2pLmPFkrUBlHC23xjqZ6d149taCjLPHghCEPTyeyGZt3Lg7NMqUfsskw2lQcwKXVDDl0PwtN6qkc7/yHLAyaKaWyJox+a3+01danELchsSYy1CkT7BFiv/hBSgXdhNCXWGDppD8YSUygNk1EsNWnrxjX3K0qEhuNTiYiHQ94dhqJQVvTq78csyuoehuFwA4OZVUlvDhuDzztiSv/wdsmI97p75u+nrWcVJc6HegqGxlo9yOjSD2QxjXz0ML/7s+qduw9YcIYEn/k6xZkoK7oL7jxXW5EqQ2oqlyotKspC+DSP78G/KKNPfF9epa0NmQYRllzxk0KtEPkT5DWKLqL81wWSFyBqa5+J+4gFMpgFzagvgBBXBv4wx5LO+W+CZB3q5nw/QsRnXxNkXdalsSDjC5K1iZMWmHpN9L7kNI5rx3e5vbraC0MaosdIYS1G5f7kuNOdKwqbq6K7aVAEcy99+5dTPU7scodWwSa/BL3e3xNhcBRs8SUCMzaLpIKRiXSJFhfL87dHsHn07vAxW9mi+2KW1vQ8m1WZgWPlfLXBT3FZjpi2ixjJ0MwrCXHNYmQKmevjtDHF5aflHRh2g0Vyq93KKaOu/d1h5htTwNeUT9g=
+  - stage: Test end-to-end
+    if: branch = master
+    script: yarn test:e2e -- --headless --url https://front-a.herokuapp.com
